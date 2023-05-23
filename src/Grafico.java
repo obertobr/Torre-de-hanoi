@@ -32,7 +32,7 @@ public class Grafico extends JFrame implements MouseListener{
     @Override
     public void paint(Graphics g){
         //pintar fundo
-        g.setColor(new Color(0,180,255));
+        g.setColor(jogo.fundo);
         g.fillRect(0,0, 1024, 728);
 
         //pintar selecionado
@@ -43,6 +43,16 @@ public class Grafico extends JFrame implements MouseListener{
                        jogo.selecionado.verificar().getDisco().getWidth()+10,
                        jogo.selecionado.verificar().getDisco().getHeight()+10);
             
+            //pintar opções
+            g.setColor(new Color(255, 0, 0, 100));
+            for(Pilha p: jogo.getTorre()){
+                if(p.verificar() != null && p.verificar().getDisco().getCor() == jogo.fundo){
+                    g.fillRect(p.verificar().getDisco().getX() -5,
+                               p.verificar().getDisco().getY()-5,
+                               p.verificar().getDisco().getWidth()+10,
+                               p.verificar().getDisco().getHeight()+10);
+                }
+            }
         }
         
         //pintar discos
