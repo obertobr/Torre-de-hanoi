@@ -5,6 +5,7 @@ import java.awt.Color;
 public class Jogo {
     Pilha[] Torre = new Pilha[3];
     Pilha selecionado = null;
+    Color fundo = new Color(0,180,255);
 
     public Jogo(){
         Torre[0] = new Pilha();
@@ -31,14 +32,18 @@ public class Jogo {
             if(p == selecionado){continue;}
             Disco DiscoSelecionado = selecionado.verificar().getDisco();
             if(p.verificar() == null || p.verificar().getDisco().getTamanho() > DiscoSelecionado.getTamanho()){
-                p.adicionar(new Disco(DiscoSelecionado.getTamanho(), Color.blue, DiscoSelecionado.getWidth(), DiscoSelecionado.getHeight()));
+                p.adicionar(new Disco(DiscoSelecionado.getTamanho(), fundo, DiscoSelecionado.getWidth(), DiscoSelecionado.getHeight()));
             }
         }
     }
 
+    public Color getFundo() {
+        return fundo;
+    }
+
     public void escondeOpcoes(){
         for(Pilha p: Torre){
-            if(p.verificar() != null && p.verificar().getDisco().getCor() == Color.blue){
+            if(p.verificar() != null && p.verificar().getDisco().getCor() == fundo){
                 p.pegar();
             }
         }
