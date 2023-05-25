@@ -8,43 +8,29 @@ package src;
  *
  * @author aluno
  */
-public class Pilha {
-    private Node anterior = null;
-    private int itens = 0;
+public class Pilha<T> {
+    Node<T> anterior = null;
+    int itens = 0;
 
     public int getItens() {
         return itens;
     }
 
-    public Node adicionar(Disco disco) {
-        Node novo = new Node(disco, anterior);
+    public Node<T> adicionar(T conteudo) {
+        Node<T> novo = new Node<>(conteudo, anterior);
         anterior = novo;
         itens++;
         return novo;
     }
     
-    public Node verificar(){
+    public Node<T> verificar(){
         return anterior;
     }
     
-    public Node pegar(){
-        Node atual = anterior;
+    public Node<T> pegar(){
+        Node<T> atual = anterior;
         anterior = atual.getAnterior();
         itens--;
         return atual;
-    }
-    
-    public Disco[] getAll(){
-        Disco[] vetor = new Disco[itens];
-        if(anterior == null){
-            return vetor;
-        }
-        Node ant = anterior;
-        vetor[itens-1] = ant.getDisco();
-        for(int i = itens-2; i >= 0;i--){
-            ant = ant.getAnterior();
-            vetor[i] = ant.getDisco();
-        }
-        return vetor;
     }
 }

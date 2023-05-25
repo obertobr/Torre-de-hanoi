@@ -3,14 +3,14 @@ package src;
 import java.awt.Color;
 
 public class Jogo {
-    Pilha[] Torre = new Pilha[3];
-    Pilha selecionado = null;
+    Torre[] Torre = new Torre[3];
+    Torre selecionado = null;
     Color fundo = new Color(0,180,255);
 
     public Jogo(){
-        Torre[0] = new Pilha();
-        Torre[1] = new Pilha();
-        Torre[2] = new Pilha();
+        Torre[0] = new Torre();
+        Torre[1] = new Torre();
+        Torre[2] = new Torre();
         
         Torre[0].adicionar(new Disco(5,Color.black, 250, 30));
         Torre[0].adicionar(new Disco(4,Color.red, 200,30));
@@ -19,19 +19,19 @@ public class Jogo {
         Torre[0].adicionar(new Disco(1,Color.GREEN, 50, 30));
     }
 
-    public Pilha getSelecionado() {
+    public Torre getSelecionado() {
         return selecionado;
     }
 
-    public void setSelecionado(Pilha selecionado) {
+    public void setSelecionado(Torre selecionado) {
         this.selecionado = selecionado;
     }
 
     public void mostrarOpcoes(){
-        for(Pilha p: Torre){
+        for(Torre p: Torre){
             if(p == selecionado){continue;}
-            Disco DiscoSelecionado = selecionado.verificar().getDisco();
-            if(p.verificar() == null || p.verificar().getDisco().getTamanho() > DiscoSelecionado.getTamanho()){
+            Disco DiscoSelecionado = selecionado.verificar().getConteudo();
+            if(p.verificar() == null || p.verificar().getConteudo().getTamanho() > DiscoSelecionado.getTamanho()){
                 p.adicionar(new Disco(DiscoSelecionado.getTamanho(), fundo, DiscoSelecionado.getWidth(), DiscoSelecionado.getHeight()));
             }
         }
@@ -42,28 +42,28 @@ public class Jogo {
     }
 
     public void escondeOpcoes(){
-        for(Pilha p: Torre){
-            if(p.verificar() != null && p.verificar().getDisco().getCor() == fundo){
+        for(Torre p: Torre){
+            if(p.verificar() != null && p.verificar().getConteudo().getCor() == fundo){
                 p.pegar();
             }
         }
     }
 
-    public Pilha getTorreUnica(int index) {
+    public Torre getTorreUnica(int index) {
         return Torre[index];
     }
 
-    public void trocarPosicao(Pilha Torre1, Pilha Torre2) {
+    public void trocarPosicao(Torre Torre1, Torre Torre2) {
         if(Torre2.getItens() == 0){
-            Torre2.adicionar(Torre1.pegar().getDisco());
-        } else if(Torre1.verificar().getDisco().getTamanho() < Torre2.verificar().getDisco().getTamanho()){
-            Torre2.adicionar(Torre1.pegar().getDisco());
+            Torre2.adicionar(Torre1.pegar().getConteudo());
+        } else if(Torre1.verificar().getConteudo().getTamanho() < Torre2.verificar().getConteudo().getTamanho()){
+            Torre2.adicionar(Torre1.pegar().getConteudo());
         } else{
             System.out.println("erro");
         }
     }
 
-    public Pilha[] getTorre() {
+    public Torre[] getTorre() {
         return Torre;
     }
 

@@ -8,24 +8,24 @@ package src;
  *
  * @author aluno
  */
-public class Node {
-    private Disco disco;
-    private Node anterior;
+public class Node<T> {
+    private T conteudo;
+    private Node<T> anterior;
 
-    public Disco getDisco() {
-        return disco;
+    public T getConteudo() {
+        return conteudo;
     }
 
-    public Node getAnterior() {
+    public Node<T> getAnterior() {
         return anterior;
     }
 
-    public Node(Disco disco, Node anterior) {
-        this.disco = disco;
+    public Node(T conteudo, Node<T> anterior) {
+        this.conteudo = conteudo;
         this.anterior = anterior;
     }
 
-    public void setDisco(Disco disco) {
-        this.disco = disco;
+    public void setDisco(T conteudo) {
+        this.conteudo = conteudo;
     }
 }

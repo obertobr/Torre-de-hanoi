@@ -22,7 +22,7 @@ public class Grafico extends JFrame implements MouseListener{
 
     public Grafico(Jogo jogo) {
         this.jogo = jogo;
-        setTitle("teste");
+        setTitle("Torre de Hanoi");
         setSize(1024,728);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -38,25 +38,25 @@ public class Grafico extends JFrame implements MouseListener{
         //pintar selecionado
         if(jogo.selecionado != null){
             g.setColor(Color.red);
-            g.fillRect(jogo.selecionado.verificar().getDisco().getX()-5,
-                       jogo.selecionado.verificar().getDisco().getY()-5,
-                       jogo.selecionado.verificar().getDisco().getWidth()+10,
-                       jogo.selecionado.verificar().getDisco().getHeight()+10);
+            g.fillRect(jogo.selecionado.verificar().getConteudo().getX()-5,
+                       jogo.selecionado.verificar().getConteudo().getY()-5,
+                       jogo.selecionado.verificar().getConteudo().getWidth()+10,
+                       jogo.selecionado.verificar().getConteudo().getHeight()+10);
             
             //pintar opções
             g.setColor(new Color(255, 0, 0, 100));
-            for(Pilha p: jogo.getTorre()){
-                if(p.verificar() != null && p.verificar().getDisco().getCor() == jogo.fundo){
-                    g.fillRect(p.verificar().getDisco().getX() -5,
-                               p.verificar().getDisco().getY()-5,
-                               p.verificar().getDisco().getWidth()+10,
-                               p.verificar().getDisco().getHeight()+10);
+            for(Torre p: jogo.getTorre()){
+                if(p.verificar() != null && p.verificar().getConteudo().getCor() == jogo.fundo){
+                    g.fillRect(p.verificar().getConteudo().getX() -5,
+                               p.verificar().getConteudo().getY()-5,
+                               p.verificar().getConteudo().getWidth()+10,
+                               p.verificar().getConteudo().getHeight()+10);
                 }
             }
         }
         
         //pintar discos
-        for(Pilha p: jogo.getTorre()){
+        for(Torre p: jogo.getTorre()){
             for(Disco d: p.getAll()){
                 g.setColor(d.getCor());
                 g.fillRect(d.getX(), d.getY(), d.getWidth(), d.getHeight());
@@ -88,9 +88,9 @@ public class Grafico extends JFrame implements MouseListener{
     }
 
     private void testarClickEmObjeto(int x, int y){
-        for(Pilha p: jogo.getTorre()){
+        for(Torre p: jogo.getTorre()){
             if(p.verificar() == null){ continue;}
-            Disco disco = p.verificar().getDisco();
+            Disco disco = p.verificar().getConteudo();
             if(disco.getX() < x && x < disco.getX() + disco.getWidth() &&
             disco.getY() < y && y < disco.getY() + disco.getHeight()){
                 if(jogo.selecionado != null){
