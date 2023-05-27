@@ -5,8 +5,11 @@ package src;
  */
 
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -17,13 +20,20 @@ import javax.swing.JFrame;
  *
  * @author obertobr
  */
+
 public class Grafico extends JFrame implements MouseListener{
     Jogo jogo;
+    int widthTela = 1024;
+    int heightTela = 728;
+    int numTorres = 3;
+    int numDiscos = 6;
+    int height = heightTela/(numDiscos*4);
+    int width = widthTela / numTorres - 100;
 
     public Grafico(Jogo jogo) {
         this.jogo = jogo;
         setTitle("Torre de Hanoi");
-        setSize(1024,728);
+        setSize(widthTela,heightTela);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         addMouseListener(this);
@@ -31,37 +41,53 @@ public class Grafico extends JFrame implements MouseListener{
     
     @Override
     public void paint(Graphics g){
+        Graphics2D g2 = (Graphics2D) g;
         //pintar fundo
         g.setColor(jogo.fundo);
         g.fillRect(0,0, 1024, 728);
 
-        //pintar selecionado
-        if(jogo.selecionado != null){
-            g.setColor(Color.red);
-            g.fillRect(jogo.selecionado.verificar().getConteudo().getX()-5,
-                       jogo.selecionado.verificar().getConteudo().getY()-5,
-                       jogo.selecionado.verificar().getConteudo().getWidth()+10,
-                       jogo.selecionado.verificar().getConteudo().getHeight()+10);
-            
-            //pintar opções
-            g.setColor(new Color(255, 0, 0, 100));
-            for(Torre p: jogo.getTorre()){
-                if(p.verificar() != null && p.verificar().getConteudo().getCor() == jogo.fundo){
-                    g.fillRect(p.verificar().getConteudo().getX() -5,
-                               p.verificar().getConteudo().getY()-5,
-                               p.verificar().getConteudo().getWidth()+10,
-                               p.verificar().getConteudo().getHeight()+10);
-                }
-            }
+        g.setColor(new Color(29, 146, 64));
+        g.fillRect(0,heightTela-200+height, 1024, 728);
+
+        for(int i=0;i<numDiscos;i++){
+            g.setColor(new Color(184, 133, 65));
+            g.fillRect((((widthTela-300)/(numTorres-1))*i)-((width+20)/2)+150,
+                  heightTela-200,
+                  width+20,
+                  height);
+            g.setColor(new Color(198, 153, 94));
+            g.fillRect((((widthTela-300)/(numTorres-1))*i)-(width/numDiscos/4)+150,
+                  (heightTela-200)-((numDiscos+2)*height),
+                  width/numDiscos/2,
+                  height*(numDiscos+2));
         }
         
         //pintar discos
+        g2.setStroke(new BasicStroke(1));
         for(Torre p: jogo.getTorre()){
             for(Disco d: p.getAll()){
                 g.setColor(d.getCor());
-                g.fillRect(d.getX(), d.getY(), d.getWidth(), d.getHeight());
+                g.fillRect(d.getX(), d.getY(), d.getWidth(), height);
+                g.setColor(Color.black);
+                g.drawRect(d.getX()-1, d.getY()-1, d.getWidth(), height);
             }
         }
+
+        //pintar borda do selecionado
+        g2.setStroke(new BasicStroke(4));
+        if(jogo.getSelecionado() != null){
+            g.setColor(Color.red);
+            g.drawRect(jogo.getSelecionado().verificar().getConteudo().getX()+1,
+                       jogo.getSelecionado().verificar().getConteudo().getY()+1,
+                       jogo.getSelecionado().verificar().getConteudo().getWidth()-3,
+                       height-3);
+        }
+
+        //escrever numero de movimentos
+        g2.setStroke(new BasicStroke(3));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+        g.setColor(Color.white);
+        g.drawString("Movimentos: " + String.valueOf(jogo.getMovimentos()), widthTela - 200, 60);
     }
 
     public void desenhar() {
@@ -70,20 +96,17 @@ public class Grafico extends JFrame implements MouseListener{
     }
 
     private void calcularLocal() {
-        int contador = 0;
-        for(Disco i: jogo.getTorreUnica(0).getAll()){
-            i.setLocal((((1024-300)/2)*0)-(i.getWidth()/2)+150, 650-(50*contador));
-            contador ++;
-        }
-        contador = 0;
-        for(Disco i: jogo.getTorreUnica(1).getAll()){
-            i.setLocal((((1024-300)/2)*1)-(i.getWidth()/2)+150, 650-(50*contador));
-            contador ++;
-        }
-        contador = 0;
-        for(Disco i: jogo.getTorreUnica(2).getAll()){
-            i.setLocal((((1024-300)/2)*2)-(i.getWidth()/2)+150, 650-(50*contador));
-            contador ++;
+        int indexDiscos = 1;
+        int indexTorres = 0;
+        for(Torre p: jogo.getTorre()){
+            for(Disco d: p.getAll()){
+                d.setWidth(width/numDiscos*d.getTamanho());
+                d.setLocal((((widthTela-300)/(numTorres-1))*indexTorres)-(d.getWidth()/2)+150,
+                          (heightTela-200)-(indexDiscos*height));
+                indexDiscos ++;
+            }
+            indexTorres++;
+            indexDiscos = 1;
         }
     }
 
@@ -93,12 +116,12 @@ public class Grafico extends JFrame implements MouseListener{
             Disco disco = p.verificar().getConteudo();
             if(disco.getX() < x && x < disco.getX() + disco.getWidth() &&
             disco.getY() < y && y < disco.getY() + disco.getHeight()){
-                if(jogo.selecionado != null){
+                if(jogo.getSelecionado() != null){
                     jogo.escondeOpcoes();
-                    jogo.trocarPosicao(jogo.selecionado, p);
-                    jogo.selecionado = null;
+                    jogo.trocarPosicao(jogo.getSelecionado(), p);
+                    jogo.setSelecionado(null);;
                 } else {
-                    jogo.selecionado = p;
+                    jogo.setSelecionado(p);
                     jogo.mostrarOpcoes();
                 }
                 desenhar();

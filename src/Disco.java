@@ -16,7 +16,7 @@ public class Disco {
     private int x;
     private int y;
     private int width;
-    private int height;
+    private int height = 30;
 
     public int getTamanho() {
         return tamanho;
@@ -24,6 +24,10 @@ public class Disco {
 
     public Color getCor() {
         return cor;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public int getX() {
@@ -47,10 +51,8 @@ public class Disco {
         this.y = y;
     }
 
-    public Disco(int tamanho, Color cor, int width, int height) {
+    public Disco(int tamanho, Color cor) {
         this.tamanho = tamanho;
         this.cor = cor;
-        this.width = width;
-        this.height = height;
     }
 }
