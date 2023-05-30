@@ -16,9 +16,6 @@ public class Torre_de_Hanoi {
         Grafico grafico = new Grafico(jogo);
 
         grafico.desenhar();
-        //Thread.sleep(1000);
-        //grafico.desenhar();
-        //jogo.desenhar();
     }
     
 }

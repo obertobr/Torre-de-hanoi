@@ -88,6 +88,30 @@ public class Grafico extends JFrame implements MouseListener{
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
         g.setColor(Color.white);
         g.drawString("Movimentos: " + String.valueOf(jogo.getMovimentos()), widthTela - 200, 60);
+
+        if(jogo.isGanhou()){
+            telaGanhou(g);
+        }
+    }
+
+    private void telaGanhou(Graphics g){
+        g.setColor(new Color(112, 146, 190));
+        g.fillRect(0,0, 1024, 728);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 80));
+        g.drawString("PARABÉNS", widthTela/2-210, heightTela/2);
+
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 56));
+        g.drawString("VOCÊ GANHOU", widthTela/2-200, heightTela/2+56);
+
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 38));
+        g.drawString("COM "+jogo.getMovimentos()+" MOVIMENTOS", widthTela/2-200, heightTela/2+100);
+
+        g.fillRect(widthTela/2-190, heightTela/2+110, 390, 70);
+        g.setColor(Color.black);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        g.drawString("REINICIAR", widthTela/2-130, heightTela/2+163);
     }
 
     public void desenhar() {
@@ -111,6 +135,14 @@ public class Grafico extends JFrame implements MouseListener{
     }
 
     private void testarClickEmObjeto(int x, int y){
+        if(jogo.isGanhou()){
+            if(widthTela/2-190 < x && x < widthTela/2-190 + 390 &&
+            heightTela/2+110 < y && y < heightTela/2+70 + 110){
+                jogo.iniciar();
+                desenhar();
+            }
+        }
+
         for(Torre p: jogo.getTorre()){
             if(p.verificar() == null){ continue;}
             Disco disco = p.verificar().getConteudo();
